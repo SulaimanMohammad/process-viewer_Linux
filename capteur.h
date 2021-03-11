@@ -16,4 +16,8 @@ typedef struct proc_info_s
 
 proc_info_t *capteur();
 
+void affiche_mytop(proc_info_t *m);
+
+void free_proc(proc_info_t *m);
+
 #endif
