@@ -49,11 +49,11 @@ void affiche_mytop(proc_info_t *m)
 
 	printf("Process:  %ld\n", m->nb_process);
 
-	printf("%20s: \t%5s  \t%5s  \t%5s\n", "COMMAND", "PPID", "TID", "RSS");
+	printf("%20s: \t%10s  \t\t%5s  \t%5s  \t%5s\n", "COMMAND", "USER","PPID", "TID", "RSS");
 
 	for(int i = 0; m->info[i] != NULL && i< m->nb_process; i++)
 	{
-		printf("%20s: \t%5d  \t%5d  \t%5ld\n", m->info[i]->cmd, m->info[i]->ppid,m->info[i]->tid, m->info[i]->rss);
+		printf("%20s: \t%10s  \t\t%5d  \t%5d  \t%5ld\n", m->info[i]->cmd,m->info[i]->ruser,m->info[i]->ppid,m->info[i]->tid, m->info[i]->rss);
 
 
 	}
