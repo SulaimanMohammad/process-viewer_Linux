@@ -10,7 +10,7 @@
 
 typedef struct proc_info_s
 {
-	size_t n;
+	size_t nb_process;
 	proc_t **info;
 }proc_info_t;
 
