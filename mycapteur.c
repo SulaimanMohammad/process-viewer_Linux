@@ -18,14 +18,10 @@
 
 proc_info_t *capteur()
 {
-	int cmpt;
+	int cmpt=0;
 
 	PROCTAB *tab_proc = openproc(PROC_FLAGS);
 	
-	if(!tab_proc)
-	{
-		perror("openproc");
-	}
 	proc_t **info = readproctab(PROC_FLAGS);
 
 
@@ -53,11 +49,11 @@ void affiche_mytop(proc_info_t *m)
 
 	printf("Process:  %ld\n", m->nb_process);
 
-	printf("%s: \t%s  \t%s  \t%s\n", "COMMAND", "PPID", "TID", "RSS");
+	printf("%20s: \t%5s  \t%5s  \t%5s\n", "COMMAND", "PPID", "TID", "RSS");
 
 	for(int i = 0; m->info[i] != NULL && i< m->nb_process; i++)
 	{
-		printf("%s: \t%d  \t%d  \t%ld\n", m->info[i]->cmd, m->info[i]->ppid,m->info[i]->tid, m->info[i]->rss);
+		printf("%20s: \t%5d  \t%5d  \t%5ld\n", m->info[i]->cmd, m->info[i]->ppid,m->info[i]->tid, m->info[i]->rss);
 
 
 	}
