@@ -42,5 +42,35 @@ proc_info_t *capteur()
 	machine->nb_process = cmpt;
 
 	return machine;
+}
+
+void affiche_mytop(proc_info_t *m)
+{
+	if(!m)
+	{
+		exit(1);
+	}
+
+	printf("Process:  %ld\n", m->nb_process);
+
+	printf("%s: \t%s  \t%s  \t%s\n", "COMMAND", "PPID", "TID", "RSS");
+
+	for(inti i = 0; m->info[i] != NULL && i< m->nb_process; i++)
+	{
+		printf("%s: \t%d  \t%d  \t%ld\n", m->info[i]->cmd, m->info[i]->ppid,m->info[i]->tid, m->info[i]->rss);
+
+
+	}
+}
+
+void free_proc(proc_info_t *m)
+{
+	for (int i = 0; m->info[i] != NULL && i < m->nb_process; i++)
+    	{
+      		freeproc(p->info[i]);
+    	}
+
+
+  free(p);
 
 }
