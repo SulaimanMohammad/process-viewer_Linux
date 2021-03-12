@@ -23,14 +23,14 @@ void process_value(int pid)
 
   proc->mem = ((float) proc->rss/cpud->total_memkb)*100;
 
-  find_usrname(pid);
+ // find_usrname(pid);
 
   get_sharedmemory_size(proc,pid);
 
   proc->vsize=((int)(proc->vsize)/(int)1000000);//vsize in byte
 
   printf("%8d",pid);
-  printf("%12s",find_usrname(pid));
+ // printf("%12s\n",find_usrname(pid));
   printf("%7ld",proc->priority);
   printf("%8ld",proc->nice);
   printf("%10dM",proc->vsize);
@@ -41,7 +41,9 @@ void process_value(int pid)
   printf("%9.2f",proc->mem);
   printf("%9lu",proc->process_time);
   printf("%12s\n",proc->name);
- // fflush(stdout);
+  char buf[100];
+  write(1,buf,proc->name);
+  fflush(stdout);
 
  free(cpud);
  free(proc);
@@ -70,8 +72,11 @@ bool kernal_thread(int pid)//kenale thread has cmdline  empty
 void main(int argc, char **argv) {
 //int pids[4194303]={0};//there is no pid is zero
 int pids;
+  printf("======================================================================================================================\n");
+  printf("|   PID   |  USER   |   PRI   |   NI   |  VIRT  |   RES   |   SHR   |   S   |   CPU%   |   MEM%   |  TIME+ | COMMAND  \n");
+  printf("======================================================================================================================\n");
 
-#pragma omp parallel
+	#pragma omp parallel
 {
  while(1){
   DIR* proc = opendir("/proc");
@@ -88,12 +93,7 @@ int pids;
      continue;
   pids = strtol(ent->d_name, NULL, 10);
   if(!kernal_thread(pids))
-  //call the function
-  // update();
- /* printf("======================================================================================================================\n");
-  printf("|   PID   |  USER   |   PRI   |   NI   |  VIRT  |   RES   |   SHR   |   S   |   CPU%   |   MEM%   |  TIME+ | COMMAND  \n");
-  printf("======================================================================================================================\n");
- */
+  //call the calculation function
  process_value(pids);
 
  }
@@ -101,12 +101,12 @@ int pids;
     //sleep(1);
     gotoxy(0, 0);
     usleep(100); 
- closedir(proc);
 
-}
-    //update();
-    //sleep(1);
-   // gotoxy(0, 0);
-   // usleep(100); 
-}
+  closedir(proc);
+  printf("======================================================================================================================\n");
+  printf("|   PID   |  USER   |   PRI   |   NI   |  VIRT  |   RES   |   SHR   |   S   |   CPU%   |   MEM%   |  TIME+ | COMMAND  \n");
+  printf("======================================================================================================================\n");
+
+  }
+ }
 }
