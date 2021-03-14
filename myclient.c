@@ -1,4 +1,19 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <mqueue.h>
+
+#include "client.h"
+#include "capteur.h"
+#include "server.h"
 #include "readprocess.h"
+
 //macros to clear the output and refrech the output
 #define update() printf("\033[H\033[J")
 #define gotoxy(x, y) printf("\033[%d;%dH", x, y)
@@ -26,10 +41,7 @@ void process_value(int pid)
 
   get_memory_usage(proc,memo);
 
-  // find_usrname(pid);
-
   get_sharedmemory_size(memo,pid); // shared memory for the process
-
 
   printf("%8d",pid);
   printf("%12.10s",find_usrname(pid));
@@ -93,47 +105,14 @@ bool kernal_thread(int pid)
 }
 
 
-void main(int argc, char *argv[])
+void affiche_hot_client()
 {
 
-int i=0;
   int pids;
   printf("======================================================================================================================\n");
   printf("|   PID   |  USER   |   PRI   |   NI   |  VIRT  |   RES   |   SHR   |   S   |   CPU%   |   MEM%   |  TIME+ | COMMAND  \n");
   printf("======================================================================================================================\n");
-
- //#pragma omp parallel
- //{
-
-  if(argc>=2)
-  {
-    DIR* procd = opendir("/proc");
-    struct dirent* ent;
-    if(procd == NULL)
-    {
-      perror("opendir");
-    }
-    while(ent = readdir(procd))
-    {
-      if(!isdigit(*ent->d_name))
-      continue;
-      pids = strtol(ent->d_name, NULL, 10);
-
-      //check if there is instruction to show specific process
-      if(strcmp(argv[1],"-i") && (strtol(argv[2], NULL, 10) == pids))
-      {
-        while(1)
-        {
-         process_value(pids);
-        }
-      }
-    }
-    closedir(procd);
-
-  }
- //show all the process
- else
- {
+	
   while(1)
   {
    DIR* procd = opendir("/proc");
@@ -159,5 +138,58 @@ int i=0;
    closedir(procd);
 
   }
- }
+}
+
+
+
+void my_client()
+{
+	struct addrinfo *addr_info =NULL;
+  struct addrinfo hints;
+
+	memset(&hints, 0, sizeof(struct addrinfo));
+
+  hints.ai_family = AF_UNSPEC;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_flags = AI_PASSIVE;
+
+  int ret = getaddrinfo(NULL, SERVER_PORT, &hints, &addr_info);
+
+  if (ret < 0)
+    {
+      herror("getaddrinfo");
+      exit(EXIT_FAILURE);
+    }
+
+    struct addrinfo *tmp = NULL;
+    int sock = -1;
+    int connected = 0;
+
+    for (tmp = addr_info; tmp != NULL; tmp = tmp->ai_next)
+      {
+        sock = socket(tmp->ai_family, tmp->ai_socktype, tmp->ai_protocol);
+
+        if (sock < 0)
+          {
+            perror("socket");
+            continue;
+          }
+
+        int ret = connect(sock, tmp->ai_addr, tmp->ai_addrlen);
+
+        if (ret < 0)
+          {
+            perror("connect");
+            continue;
+          }
+
+        connected = 1;
+        break;
+      }
+
+		affiche_hot_client();
+
+    shutdown(sock, SHUT_RDWR);
+
+    close(sock);
 }
