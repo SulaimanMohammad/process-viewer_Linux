@@ -31,10 +31,12 @@ vous pouvez faire "make" pour avoir tous les fichiers binairs et vous avez deux 
 
 2- pour exécuter le programme sur votre machine  
 
-    pour tous les processes:
-    ./htopexe.o
+Pour tous les processes:
+          
+        ./htopexe.o
   
-      pour une processus:
+   Pour une processus:
+      
       ./htopexe i [pid] 
 
 comment tout fonctionne:
