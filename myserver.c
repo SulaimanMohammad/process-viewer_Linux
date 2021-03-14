@@ -90,7 +90,7 @@ void serveur()
 
       if (!client)
         {
-          fprintf(stderr, "Error: canno't allocate memory\n");
+          fprintf(stderr, "Erreur d'allocationn");
           exit(EXIT_FAILURE);
         }
 

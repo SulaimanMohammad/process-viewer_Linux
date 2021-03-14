@@ -29,13 +29,25 @@ proc_info_t *capteur()
 
 	proc_info_t *machine = malloc(sizeof(proc_info_t));
 
-	machine->info = info;
 
-	while(machine->info[cmpt]!=NULL)
+	while(info[cmpt]!=NULL)
 	{
 		cmpt++;
 	}
 	machine->nb_process = cmpt;
+
+	int con=gethostname(machine->name,200);
+	if(con<0)
+	{	
+		perror("gethostname");
+	}
+
+	machine->nproc =get_nprocs();
+
+	if(cmpt)
+	{
+		machine->size_memorie= machine->proc_info[0].vsize;
+	}
 
 	return machine;
 }
@@ -48,25 +60,9 @@ void affiche_mytop(proc_info_t *m)
 	}
 
 	printf("Process:  %ld\n", m->nb_process);
-
-	printf("%20s: \t%10s  \t\t%5s  \t%5s  \t%5s\n", "COMMAND", "USER","PPID", "TID", "RSS");
-
-	for(int i = 0; m->info[i] != NULL && i< m->nb_process; i++)
-	{
-		printf("%20s: \t%10s  \t\t%5d  \t%5d  \t%5ld\n", m->info[i]->cmd,m->info[i]->ruser,m->info[i]->ppid,m->info[i]->tid, m->info[i]->rss);
-
-
-	}
+	printf("Machine: %s\n",m->name);
+	printf("Process; %ld\n", m->nb_process);
+	printf("Memory: %ld\n", m->nb_process);
 }
 
-void free_proc(proc_info_t *m)
-{
-	for (int i = 0; m->info[i] != NULL && i < m->nb_process; i++)
-    	{
-      		freeproc(m->info[i]);
-    	}
 
-
-  free(m);
-
-}
