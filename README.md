@@ -3,9 +3,7 @@
 
 vous pouvez faire "make" pour avoir tous les fichiers binairs et vous avez deux options: 
 
-1- exécuter (./htopexe.o) que pour exécuter le programme sur votre machine pour tous les processes , ou (./htopexe i [pid] )pour une processus
-
-2-Installation:
+1-Installation:
 
   Pour installer l'outil il suffit de recupere le source du projet dans github
   
@@ -30,6 +28,15 @@ vous pouvez faire "make" pour avoir tous les fichiers binairs et vous avez deux 
    
         ./myhtop -c
 
+
+2- pour exécuter le programme sur votre machine  
+
+  pour tous les processes
+  ./htopexe.o
+  
+ou 
+  pour une processus
+  ./htopexe i [pid] 
 
 comment tout fonctionne:
 
