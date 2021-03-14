@@ -5,7 +5,6 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netdb.h>
-#include <arpa/net.h>
 #include <string.h>
 #include <proc/readproc.h>
 #include "server.h"
@@ -23,22 +22,22 @@ void *client_loop(void *param)
 	close(client->socket_client);
 
 }
-void serveur(int ipv)
+void serveur()
 {
 	struct addrinfo hints;
+	struct addrinfo *addr_info =NULL;
 
-	memset(&hints, 0, sizeof(struct addrinfo);
+	memset(&hints, 0, sizeof(struct addrinfo));
 
 	hints.ai_family = AF_UNSPEC;
-	hints.ai_sochtype = SOCK_STREAM;
+	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;
 
 	int ret = getaddrinfo(NULL,SERVER_PORT, &hints, &addr_info);
 
 	if(ret < 0)
 	{
-		herror("getaddrinfo"),
-		return 1;
+		herror("getaddrinfo");
 	}
 
 	struct addrinfo *tmp;
@@ -54,7 +53,7 @@ void serveur(int ipv)
 			perror("socket");
 			continue;
 		}
-		int ret = bind(listen_sock, tmp_ai->ai_addr, tmp_ai->ai_addrlen);
+		int ret = bind(listen_socket, tmp->ai_addr, tmp->ai_addrlen);
 
 		if (ret < 0)
 			{
@@ -66,7 +65,7 @@ void serveur(int ipv)
 		break;
 	}
 
-	ret = listen(listen_sock, 2);
+	ret = listen(listen_socket, 2);
 
   if (ret < 0)
     {
@@ -79,7 +78,7 @@ void serveur(int ipv)
 
   while (1)
     {
-      int client_socket = accept(listen_sock, &client_info, &addrlen);
+      int client_socket = accept(listen_socket, &client_info, &addrlen);
 
       if (client_socket < 0)
         {
@@ -95,7 +94,7 @@ void serveur(int ipv)
           exit(EXIT_FAILURE);
         }
 
-      client->client_socket = client_socket;
+      client->socket_client = client_socket;
 
       pthread_t th;
 

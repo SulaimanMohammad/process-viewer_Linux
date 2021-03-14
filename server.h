@@ -5,6 +5,7 @@
 #include "capteur.h"
 
 #define MAX 30
+#define SERVER_PORT "8080"
 
 typedef struct client_info
 {
@@ -21,4 +22,5 @@ typedef struct server_s
   client_info_t client[MAX];
 }server_t;
 
+void serveur();
 #endif
