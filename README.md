@@ -1,5 +1,14 @@
 # aise_project
 
+
+vous pouvez faire "make" pour avoir tous les fichiers binairs et vous avez deux options: 
+
+1- exécuter (./htopexe.o) que pour exécuter le programme sur votre machine pour tous les processes , ou (./htopexe i [pid] )pour une processus
+2-
+
+
+comment tout fonctionne:
+
 création d'un outil pour montrer tout le processus et les informations liées, nous devons trouver que tous les processus sont en cours d'exécution maintenant.
 pour obtenir que l'on puisse accéder au fichier appelé / proc et que le répertoire contient de nombreux fichiers quand ils sont numériques ils représentent les processus et les nombres sont les identifiants des processus
 il existe d'autres répertoires qui représentent des informations générales sur le système
@@ -40,7 +49,7 @@ ce répertoire contient d'autres répertoires et ils sont classés de manière �
 donc cette fonction après avoir accédé au répertoire, elle lit la liste du répertoire à l'intérieur, si le premier nom de répertoire est égal à l'ID de processus qui a appelé la fonction alors le processus est parent, sinon le processus est enfant
 donc si la fonction renvoie que le processus est un parent, alors la variable de temps dans / proc / pid / stat peut représenter l'heure du processus
 
-b-si le processus est un enfant, nous devons accéder à un autre fichier pour trouver l'heure, le fichier existe dans / proc / pid / schedset qui contient des statistiques pour les processus individuels, nous prenons donc le premier nombre qui est le temps passé sur le processeur de le processus lui-même même s'il ne s'agit que d'un enfant , et nous devons diviser par 1000000000 comme la référence (1) se réfère.
+  b-si le processus est un enfant, nous devons accéder à un autre fichier pour trouver l'heure, le fichier existe dans / proc / pid / schedset qui contient des statistiques pour les processus individuels, nous prenons donc le premier nombre qui est le temps passé sur le processeur de le processus lui-même même s'il ne s'agit que d'un enfant , et nous devons diviser par 1000000000 comme la référence (1) se réfère.
 
 
 4- calculer la taille de la mémoire dont nous avons besoin pour utiliser les données "rss" de / proc / pid / stat qui est le nombre de pages que le processus a en mémoire réelle afin d'avoir le nombre total dont nous avons besoin pour multiplier la taille rss * de page (en appelant getpagesize ()) et le résultat est en octet.
@@ -56,7 +65,7 @@ get_sharedmemory_size dans cette fonction, nous lisons le fichier / proc / pid /
 
 
 7-pour connaître le nom du nom d'utilisateur c'est un peu compliqué, on appelle la fonction find_usrname (pid)
-  cette fonction fait ce qui suit
+cette fonction fait ce qui suit
  1- nous accédons au fichier / proc / pid / status et nous récupérons la ligne qui contient l'UID qui est la ligne qui représente la référence du numéro d'utilisateur et après avoir obtenu ce numéro, nous recherchons le nom auquel il fait référence
  
  2-après avoir eu l'UID, nous devons entrer dans le répertoire / etc et lire le fichier / etc / passwd dans ce fichier, nous pouvons voir un rapport entre le nom de l'utilisateur et l'UID, donc nous recherchons le numéro UID et sauvegardons le nom
@@ -65,5 +74,7 @@ get_sharedmemory_size dans cette fonction, nous lisons le fichier / proc / pid /
 
 Refe
 1- https://lkml.org/lkml/2019/7/24/906
+
 2-https://www.cyberciti.biz/faq/understanding-etcpasswd-file-format/
+
 3-https://en.wikipedia.org/wiki/CPU_time
