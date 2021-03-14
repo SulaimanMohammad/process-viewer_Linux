@@ -109,7 +109,7 @@ void get_memory_usage(struct state  *proc,struct memorydata* memo )
 /*|||||||||||||||the shared memory usage for the target process |||||||||||||||*/
 void get_sharedmemory_size(struct memorydata *memo, int pid)
 {
-  char filename[1000];
+  char filename[100000];
   sprintf(filename, "/proc/%d/statm", pid);
   FILE* memf = fopen(filename, "r");
   if(!memf)
@@ -124,6 +124,7 @@ void get_sharedmemory_size(struct memorydata *memo, int pid)
   memo->shared_m_size=( memo->shared_m_size) * getpagesize();
 
 }
+/*||=========================================================================||*/
 
 
 
@@ -134,7 +135,7 @@ void get_sharedmemory_size(struct memorydata *memo, int pid)
 
 char* find_usrname(int pid)
 {
- char fuid[1000],fnam[1000] ,path[1000];
+ char fuid[1000],fnam[1000] ,path[100000];
  int uid;
  char* pname=NULL;
  sprintf(path, "/proc/%d/status", pid);
@@ -201,10 +202,11 @@ char* find_usrname(int pid)
   return pname;
 }
 
+/*||||||||||||||||||||||||||| stat of the process  ||||||||||||||||||||||||||||*/
 
 void read_statFile (struct state  *proc, int pid)
 {
- char filename[1000];
+ char filename[100000];
  sprintf(filename, "/proc/%d/stat", pid);
  FILE *f = fopen(filename, "r");
  if(!f)
@@ -220,6 +222,9 @@ void read_statFile (struct state  *proc, int pid)
  fclose(f);
 
 }
+/*||=========================================================================||*/
+
+
 
 /*
 ||===========================================================================||
@@ -244,7 +249,7 @@ void get_total_cpu_usage(struct cpu_info *cpud)
 }
 
 
-/*||||||||||||||||||the total CPU usage for all the processes||||||||||||||||||*/
+/*||||||||||||||||||| the CPU usage for the target process ||||||||||||||||||||*/
 void get_process_cpu_usage(struct cpu_info *cpud , struct state  *proc, int pid)
  {
   //first cpu measurment
@@ -255,7 +260,7 @@ void get_process_cpu_usage(struct cpu_info *cpud , struct state  *proc, int pid)
 
   // wiat awhile to find the usage between two points
   struct timespec wait_time={0};
-  wait_time.tv_nsec=140000000;
+  wait_time.tv_nsec=180000000;
   nanosleep(&wait_time, NULL);
 
   //second cpu measurment
@@ -267,6 +272,7 @@ void get_process_cpu_usage(struct cpu_info *cpud , struct state  *proc, int pid)
   cpud->cpu_total_time=((process_time2-process_time1)/(float)(t_cpu_u2 - t_cpu_u1))* 100.0 *sysconf(_SC_NPROCESSORS_ONLN);
 
  }
+ /*||========================================================================||*/
 
 
 
@@ -275,12 +281,11 @@ void get_process_cpu_usage(struct cpu_info *cpud , struct state  *proc, int pid)
  ||-----------------------------Time functions  ------------------------------||
  ||===========================================================================||*/
 
- // find the time of process it is thundred of seconds
-/*||||||||||||||||||the total CPU usage for all the processes||||||||||||||||||*/
+ /*||||||||||||||||||check if the process is parent or child ||||||||||||||||||*/
 bool process_isPerent(int pid)// if it is parent return true
 {
   bool isPerent=false;
-  char filename[1000];
+  char filename[100000];
   sprintf(filename, "/proc/%d/task", pid);
 
   DIR * ptype = opendir(filename); // open the  dir
@@ -313,7 +318,8 @@ bool process_isPerent(int pid)// if it is parent return true
   return isPerent;
 }
 
-/*||||||||||||||||||the total CPU usage for all the processes||||||||||||||||||*/
+// find the time of process it is thundred of seconds
+/*|||||||||||||||compute the time of the process parent or child ||||||||||||||*/
 void comput_process_time(struct state  *proc, int pid)
 {
   //check if the process is parent or child
@@ -324,7 +330,7 @@ void comput_process_time(struct state  *proc, int pid)
 
   else //it is child  here we read the file schedstat
   {
-    char filename[1000];
+    char filename[100000];
     sprintf(filename, "/proc/%d/schedstat", pid);
     FILE *sch = fopen(filename, "r");
     if(!sch)
@@ -342,7 +348,7 @@ void comput_process_time(struct state  *proc, int pid)
 
 }
 
-/*||||||||||||||||||the total CPU usage for all the processes||||||||||||||||||*/
+/*|||||||||||||||||||| the time since the system started ||||||||||||||||||||||*/
 long unsigned int get_uptime()
 {
   char buff[100];
@@ -359,3 +365,4 @@ long unsigned int get_uptime()
   }
   return (uptime);
 }
+/*||=========================================================================||*/
