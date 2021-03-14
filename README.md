@@ -4,6 +4,7 @@
 vous pouvez faire "make" pour avoir tous les fichiers binairs et vous avez deux options: 
 
 1- exécuter (./htopexe.o) que pour exécuter le programme sur votre machine pour tous les processes , ou (./htopexe i [pid] )pour une processus
+
 2-
 
 
