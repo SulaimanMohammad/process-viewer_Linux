@@ -5,12 +5,38 @@
 #include "client.h"
 
 
-int main(int argc, char **argv)
+#include "readprocess.h"
+
+void prise_client()
 {
+  my_client();
+}
 
-  proc_info_t *tab = capteur();
-  affiche_mytop(tab);
+void prise_serveur()
+{
+  serveur();
+}
+void main(int argc, char **argv)
+{
+//int pids[4194303]={0};//there is no pid is zero
+  int option =0;
 
+  while ((option = getopt(argc, argv, "sc")) != -1)
+    {
+      switch (option)
+      {
+        /*client*/
+        case 'c':
+          prise_client();
+          break;
+          /*serveur*/
+        case 's':
+          prise_serveur();
+          break;
 
-  return 0;
+        default:
+          printf("Erreur de choix\n");
+          break;
+      }
+    }
 }

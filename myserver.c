@@ -16,18 +16,20 @@ void *client_loop(void *param)
 {
 	client_info_t *client = (client_info_t *)param;
 
-	printf("connection \n");
+	printf("Connection \n");
 
 	write(client->socket_client, "Bienvenu \n", 20);
 	close(client->socket_client);
+	free(client);
 
+	return NULL;
 }
 void serveur()
 {
 	struct addrinfo hints;
 	struct addrinfo *addr_info =NULL;
 
-	memset(&hints, 0, sizeof(struct addrinfo));
+	memset(&hints, 0, sizeof(hints));
 
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
@@ -41,8 +43,8 @@ void serveur()
 	}
 
 	struct addrinfo *tmp;
-	int listen_socket;
-	int binded;
+	int listen_socket=-1;
+	int binded=0;
 
 	for(tmp = addr_info; tmp != NULL; tmp->ai_next)
 	{
