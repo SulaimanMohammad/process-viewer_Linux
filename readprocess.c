@@ -1,3 +1,13 @@
+/*
+||===========================================================================||
+|| Created by: Sulaiman MOHAMMAD                           
+|| Date: 7-14 MARCH -2021
+|| Object: it is code gather the data of processes like the htop does in linux 
+|| goal: it is has been writen for AISE project as my part in this projct
+|| The implimentation of this library was used by the code "htophandy" i wrote
+|| my partner worte small code to use this library with the htophandy to be sent to server 
+||===========================================================================||*/
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
